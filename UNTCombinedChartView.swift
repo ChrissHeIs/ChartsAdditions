@@ -172,5 +172,14 @@ public class UNTCombinedChartView: CombinedChartView {
             return super.gestureRecognizerShouldBegin(gestureRecognizer)
         }
     }
+    
+    public override func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if (gestureRecognizer == _panToHighlightGestureRecognizer) || (otherGestureRecognizer == _panToHighlightGestureRecognizer) {
+            return false
+        }
+        else {
+            return super.gestureRecognizerShouldBegin(gestureRecognizer)
+        }
+    }
 
 }
