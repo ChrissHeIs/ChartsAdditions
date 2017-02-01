@@ -73,6 +73,13 @@ public class UNTCombinedChartView: CombinedChartView {
         return max(super.highestVisibleXIndex , 0)
     }
     
+    internal override func calcModulus() {
+        // Trying to avoid a regular charts crash
+        if (_viewPortHandler.touchMatrix.a != 0.0) {
+            super.calcModulus()
+        }
+    }
+    
     override public func highlightValue(highlight highlight: ChartHighlight?, callDelegate: Bool)
     {
         // Overriding the default implementtion to allow highlighting empty space, not just values
