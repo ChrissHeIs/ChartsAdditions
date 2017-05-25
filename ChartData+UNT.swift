@@ -40,24 +40,25 @@ public extension ChartData {
 //            objc_setAssociatedObject(self, &axisLabelsAnchorXAsociationKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
 //        }
 //    }
-//}
-//
-//public extension ChartDataSet {
-//    func insertYVals(yVals: [ChartDataEntry], atIndex index: Int) {
-//        self.willChangeValueForKey("yVals")
-//        var indexOfNextObjectToInsert = index
-//        for yVal in yVals {
-//            self.yVals.insert(yVal, atIndex: indexOfNextObjectToInsert)
-//            indexOfNextObjectToInsert += 1
-//        }
-//        
-//        let recordsToShiftCount = self.yVals.count - indexOfNextObjectToInsert;
-//        if recordsToShiftCount != 0 {
-//            let shiftDelta = yVals.count
-//            for i in indexOfNextObjectToInsert...self.yVals.count - 1 {
-//                self.yVals[i].xIndex += shiftDelta
-//            }
-//        }
-//        self.didChangeValueForKey("yVals")
-//    }
+}
+
+public extension ChartDataSet {
+    func insertYVals(yVals: [ChartDataEntry], atIndex index: Int) {
+        self.willChangeValue(forKey: "yVals")
+        
+        var indexOfNextObjectToInsert = index
+        for yVal in yVals {
+            self.values.insert(yVal, at: indexOfNextObjectToInsert)
+            indexOfNextObjectToInsert += 1
+        }
+        
+        let recordsToShiftCount = self.values.count - indexOfNextObjectToInsert;
+        if recordsToShiftCount != 0 {
+            let shiftDelta = yVals.count
+            for i in indexOfNextObjectToInsert...self.values.count - 1 {
+                self.values[i].x += Double(shiftDelta)
+            }
+        }
+        self.didChangeValue(forKey: "yVals")
+    }
 }
