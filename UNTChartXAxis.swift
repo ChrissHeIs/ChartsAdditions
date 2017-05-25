@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class UNTChartXAxis: ChartXAxis, AxisMarkersStorage {
+public class UNTChartXAxis: XAxis, AxisMarkersStorage {
     var markers: [UNTChartAxisMarker] = []
     
     public func addMarker(marker: UNTChartAxisMarker) {

@@ -8,10 +8,16 @@
 
 import Foundation
 
-public class UNTChartYAxis: ChartYAxis, AxisMarkersStorage {
+public class UNTChartYAxis: YAxis, AxisMarkersStorage {
     var markers: [UNTChartAxisMarker] = []
     
-    public func addMarker(marker: UNTChartAxisMarker) {
+    public var defaultValueFormatter : DefaultValueFormatter? {
+        get {
+            return self.valueFormatter as? DefaultValueFormatter
+        }
+    }
+    
+    open func addMarker(marker: UNTChartAxisMarker) {
         self.markers.append(marker)
     }
 }

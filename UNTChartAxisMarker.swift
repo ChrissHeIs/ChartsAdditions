@@ -11,8 +11,8 @@ import Foundation
 public class UNTChartAxisMarker : NSObject {
     public var value = 0.0
     public var text: String?
-    public var backgroundColor = UIColor.clearColor()
-    public var textColor = UIColor.whiteColor()
+    public var backgroundColor = UIColor.clear
+    public var textColor = UIColor.white
     
     public var enabled = true
 }
