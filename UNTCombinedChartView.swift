@@ -49,8 +49,12 @@ public class UNTCombinedChartView: CombinedChartView {
         
         _rightAxis = UNTChartYAxis(position: .right)
         _xAxis = UNTChartXAxis()
-//        _rightYAxisRenderer = UNTChartYAxisRenderer(viewPortHandler: _viewPortHandler, yAxis: _rightAxis, transformer: _rightAxisTransformer)
-//        _xAxisRenderer = UNTChartXAxisRenderer(viewPortHandler: _viewPortHandler, xAxis: _xAxis, transformer: _leftAxisTransformer)
+        _rightYAxisRenderer = UNTChartYAxisRenderer(viewPortHandler: _viewPortHandler, yAxis: _rightAxis, transformer: _rightAxisTransformer)
+        _xAxisRenderer = UNTChartXAxisRenderer(viewPortHandler: _viewPortHandler, xAxis: _xAxis, transformer: _leftAxisTransformer)
+        
+        let datesProvider = UNTChartXAxisDatesProvider()
+        datesProvider.chartDataProvider = self
+        _xAxis.valueFormatter = datesProvider
 //        
 //        _panToHighlightGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(UNTCombinedChartView.panHighlightGestureRecognized(_:)))
 //        _panToHighlightGestureRecognizer.delegate = self

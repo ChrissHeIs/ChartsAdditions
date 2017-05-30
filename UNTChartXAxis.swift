@@ -15,3 +15,16 @@ public class UNTChartXAxis: XAxis, AxisMarkersStorage {
         self.markers.append(marker)
     }
 }
+
+@objc(UNTChartXAxisDatesProvider)
+public class UNTChartXAxisDatesProvider: NSObject, IAxisValueFormatter {
+    var chartDataProvider: ChartDataProvider!
+    
+    public func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        guard let dataSet = chartDataProvider.data?.dataSets.first else {
+            return ""
+        }
+        
+        return (dataSet.entryForIndex(Int(value))?.data as? String) ?? ""
+    }
+}

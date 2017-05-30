@@ -34,7 +34,7 @@ import Foundation
 //                            ^                                               ^
 //                      axisLabelsAnchorX                               axisLabelsAnchorX
 
-//public class UNTChartXAxisRenderer: ChartXAxisRenderer {
+public class UNTChartXAxisRenderer: XAxisRenderer {
 //    
 //    internal var axisLabelsAnchorX: Int = 0
 //    
@@ -160,4 +160,4 @@ import Foundation
 //            ]
 //        )
 //    }
-//}
+}
