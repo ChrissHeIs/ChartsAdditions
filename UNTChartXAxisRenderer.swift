@@ -35,9 +35,9 @@ import Foundation
 //                      axisLabelsAnchorX                               axisLabelsAnchorX
 
 public class UNTChartXAxisRenderer: XAxisRenderer {
-//    
-//    internal var axisLabelsAnchorX: Int = 0
-//    
+    
+    internal var axisLabelsAnchorX: Int = 0
+    
     public var markerFont = NSUIFont.systemFont(ofSize: 10.0)
     
     public override func drawLabels(context: CGContext, pos: CGFloat, anchor: CGPoint)
@@ -48,15 +48,53 @@ public class UNTChartXAxisRenderer: XAxisRenderer {
         
         super.drawLabels(context: context, pos: pos, anchor: anchor)
         
-//        let sequenceBeforeAnchor = self.axisLabelsAnchorX.stride(to: max(self.minX - 1, 0), by: -xAxis.axisLabelModulus)
+//        let sequenceBeforeAnchor = self.axisLabelsAnchorX.stride(to: max(self.min - 1, 0), by: -xAxis.axisLabelModulus)
 //        self.drawLabels(forSequence: sequenceBeforeAnchor, context: context, pos: pos, anchor: anchor)
 //        
 //        let sequenceAfterAnchor = self.axisLabelsAnchorX.stride(to: min(self.maxX + 1, xAxis.values.count), by: xAxis.axisLabelModulus)
 //        self.drawLabels(forSequence: sequenceAfterAnchor, context: context, pos: pos, anchor: anchor)
-//        
+
         for marker in xAxis.markers {
             if marker.enabled {
                 self.drawMarker(marker: marker, context: context, y: pos, textAlign: .center)
+            }
+        }
+    }
+    
+    open override func computeAxisValues(min: Double, max: Double)
+    {
+        super.computeAxisValues(min: min, max: max)
+        
+        guard let axis = self.axis else { return }
+        
+        let yMin = min
+        let yMax = max
+        
+        let labelCount = axis.labelCount
+        
+        if axis.entries.count >= 2
+        {
+            let interval = abs(axis.entries[1] - axis.entries[0])
+            let anchor = Double(axisLabelsAnchorX)
+            
+            var labelStartPoint = 0.0
+            if anchor < min {
+                labelStartPoint = anchor + ceil((min - anchor)/interval) * interval
+            }
+            else {
+                labelStartPoint = anchor - floor((anchor - min)/interval) * interval
+            }
+            
+            // Ensure stops contains at least n elements.
+            axis.entries.removeAll(keepingCapacity: true)
+            axis.entries.reserveCapacity(labelCount)
+            
+            var v = labelStartPoint
+            
+            for _ in 0 ..< labelCount
+            {
+                axis.entries.append(v)
+                v += interval
             }
         }
     }

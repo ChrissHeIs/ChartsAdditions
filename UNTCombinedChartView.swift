@@ -71,15 +71,15 @@ public class UNTCombinedChartView: CombinedChartView {
             self.highlighter = UNTEmptySpaceAllowedHighlighter(chart: self, barDataProvider: self)
         }
     }
+
+    public override func notifyDataSetChanged() {
+        super.notifyDataSetChanged()
+        
+        guard let xAxisRenderer = _xAxisRenderer as? UNTChartXAxisRenderer else { return }
+        guard let data = self.data else { return }
+        xAxisRenderer.axisLabelsAnchorX = data.axisLabelsAnchorX
+    }
 //
-//    public override func notifyDataSetChanged() {
-//        super.notifyDataSetChanged()
-//        
-//        guard let xAxisRenderer = _xAxisRenderer as? UNTChartXAxisRenderer else { return }
-//        guard let data = self.data else { return }
-//        xAxisRenderer.axisLabelsAnchorX = data.axisLabelsAnchorX
-//    }
-//    
 //    public override var highestVisibleXIndex: Int {
 //        // For some reason the index might be negative when data is changed
 //        return max(super.highestVisibleXIndex , 0)

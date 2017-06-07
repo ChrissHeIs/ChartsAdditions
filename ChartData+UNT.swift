@@ -24,22 +24,14 @@ public extension ChartData {
 //            indexOfNextObjectToInsert += 1
 //        }
 //        
-//        if (self.axisLabelsAnchorX == 0) && (xVals.count != 0) {
-//            self.axisLabelsAnchorX = xVals.count - 1
-//        }
-//        else if index <= axisLabelsAnchorX {
-//            axisLabelsAnchorX += xVals.count
-//        }
+//        
 //    }
-//    
-//    internal var axisLabelsAnchorX: Int {
-//        get {
-//            return objc_getAssociatedObject(self, &axisLabelsAnchorXAsociationKey) as? Int ?? 0
-//        }
-//        set(newValue) {
-//            objc_setAssociatedObject(self, &axisLabelsAnchorXAsociationKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
-//        }
-//    }
+    
+    internal var axisLabelsAnchorX: Int {
+        get {
+            return (self.dataSets.first as? ChartDataSet)?.axisLabelsAnchorX ?? 0
+        }
+    }
 }
 
 public extension ChartDataSet {
@@ -59,6 +51,23 @@ public extension ChartDataSet {
                 self.values[i].x += Double(shiftDelta)
             }
         }
+        
+        if (self.axisLabelsAnchorX == 0) && (yVals.count != 0) {
+            self.axisLabelsAnchorX = yVals.count - 1
+        }
+        else if index <= axisLabelsAnchorX {
+            axisLabelsAnchorX += yVals.count
+        }
+        
         self.didChangeValue(forKey: "yVals")
+    }
+    
+    internal var axisLabelsAnchorX: Int {
+        get {
+            return objc_getAssociatedObject(self, &axisLabelsAnchorXAsociationKey) as? Int ?? 0
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &axisLabelsAnchorXAsociationKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+        }
     }
 }
