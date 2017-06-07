@@ -10,19 +10,17 @@ import Foundation
 
 public class UNTEmptySpaceAllowedHighlighter : CombinedHighlighter {
     
-//    override public func getHighlight(x x: CGFloat, y: CGFloat) -> ChartHighlight?
-//    {
-//        let xIndex = getXIndex(x)
-//        
-//        guard let selectionDetail = getSelectionDetail(xIndex: xIndex, y: y, dataSetIndex: nil),
-//            let dataSet = selectionDetail.dataSet
-//            else { return nil }
-//        
-//        var point = CGPoint()
-//        point.y = y
-//        
-//        self.chart!.getTransformer(dataSet.axisDependency).pixelToValue(&point)
-//        
-//        return ChartHighlight(xIndex: xIndex, value: Double(point.y), dataIndex: selectionDetail.dataIndex, dataSetIndex: selectionDetail.dataSetIndex, stackIndex: -1)
-//    }
+    open override func getHighlight(x: CGFloat, y: CGFloat) -> Highlight? {
+        guard let chart = self.chart as? BarLineScatterCandleBubbleChartDataProvider,
+            let set = chart.data?.dataSets.first,
+            let originalHighlight = super.getHighlight( x: x, y: y)
+            else {
+            return nil
+        }
+        let transformer = chart.getTransformer(forAxis: .right)
+        var point = CGPoint(x: x, y: y)
+        transformer.pixelToValues(&point)
+        var highlight = Highlight(x: originalHighlight.x, y: Double(point.y), xPx:originalHighlight.xPx , yPx:y  , dataSetIndex: 0, stackIndex:-1, axis: set.axisDependency)
+        return highlight
+    }
 }

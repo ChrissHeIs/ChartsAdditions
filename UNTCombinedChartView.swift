@@ -14,10 +14,10 @@ import UIKit
 public class UNTCombinedChartView: CombinedChartView {
     
     override public var rightAxis: UNTChartYAxis { return _rightAxis as! UNTChartYAxis }
-//    override public var xAxis: UNTChartXAxis { return _xAxis as! UNTChartXAxis }
+    override public var xAxis: UNTChartXAxis { return _xAxis as! UNTChartXAxis }
 //    public var rightAxisRenderer: UNTChartYAxisRenderer { return _rightYAxisRenderer as! UNTChartYAxisRenderer }
-//    public var highlightRenderer: UNTChartHighlightRenderer!
-//    
+    public var highlightRenderer: UNTChartHighlightRenderer!
+//
 //    internal var _panToHighlightGestureRecognizer: NSUIPanGestureRecognizer!
 //    
 //    override public var data: ChartData? {
@@ -60,8 +60,16 @@ public class UNTCombinedChartView: CombinedChartView {
 //        _panToHighlightGestureRecognizer.delegate = self
 //        self.addGestureRecognizer(_panToHighlightGestureRecognizer)
 //        
-//        self.highlightRenderer = UNTChartHighlightRenderer(dataProvider: self, animator: _animator, viewPortHandler:_viewPortHandler)
-//        self.highlighter = UNTEmptySpaceAllowedHighlighter(chart: self)
+        self.highlightRenderer = UNTChartHighlightRenderer(dataProvider: self, animator: _animator, viewPortHandler:_viewPortHandler)
+        self.highlighter = UNTEmptySpaceAllowedHighlighter(chart: self, barDataProvider: self)
+    }
+    
+    open override var data: ChartData?{
+        didSet
+        {
+            // Overriding the existing setter's functionality of highlighter changing
+            self.highlighter = UNTEmptySpaceAllowedHighlighter(chart: self, barDataProvider: self)
+        }
     }
 //
 //    public override func notifyDataSetChanged() {
@@ -84,55 +92,55 @@ public class UNTCombinedChartView: CombinedChartView {
 //        }
 //    }
 //    
-//    override public func highlightValue(highlight highlight: ChartHighlight?, callDelegate: Bool)
-//    {
-//        // Overriding the default implementtion to allow highlighting empty space, not just values
-//        var entry: ChartDataEntry?
-//        let h = highlight
-//        
-//        if (h == nil)
-//        {
-//            _indicesToHighlight.removeAll(keepCapacity: false)
-//        }
-//        else
-//        {
-//            _indicesToHighlight = [h!]
-//        }
-//        
-//        if (callDelegate && delegate != nil)
-//        {
-//            if (h == nil)
-//            {
-//                delegate!.chartValueNothingSelected?(self)
-//            }
-//            else
-//            {
-//                entry = _data?.getEntryForHighlight(h!) ?? _data?.getDataSetByIndex(highlight!.dataSetIndex).entryForIndex(highlight!.xIndex)
-//                // notify the listener
-//                delegate!.chartValueSelected?(self, entry: entry!, dataSetIndex: h!.dataSetIndex, highlight: h!)
-//            }
-//        }
-//        
-//        setNeedsDisplay()
-//    }
-//    
-//    override public func valuesToHighlight() -> Bool
-//    {
-//        // Disable the standart highlighting
-//        return false
-//    }
-//    
-//    override public func drawRect(rect: CGRect) {
-//        super.drawRect(rect)
-//        
-//        let optionalContext = NSUIGraphicsGetCurrentContext()
-//        guard let context = optionalContext else { return }
-//        
-//        if _indicesToHighlight.count != 0 {
-//            self.highlightRenderer.drawHighlighted(context: context, indices: _indicesToHighlight)
-//        }
-//    }
-//    
+    override public func highlightValue(_ highlight: Highlight?, callDelegate: Bool)
+    {
+        // Overriding the default implementtion to allow highlighting empty space, not just values
+        var entry: ChartDataEntry?
+        let h = highlight
+        
+        if (h == nil)
+        {
+            _indicesToHighlight.removeAll(keepingCapacity: false)
+        }
+        else
+        {
+            _indicesToHighlight = [h!]
+        }
+        
+        if (callDelegate && delegate != nil)
+        {
+            if (h == nil)
+            {
+                delegate!.chartValueNothingSelected?(self)
+            }
+            else
+            {
+                entry = _data?.entryForHighlight(h!) ?? ChartDataEntry(x: h!.x, y: h!.y)
+                // notify the listener
+                delegate!.chartValueSelected?(self, entry: entry!, highlight: h!)
+            }
+        }
+        
+        setNeedsDisplay()
+    }
+    
+    override public func valuesToHighlight() -> Bool
+    {
+        // Disable the standart highlighting
+        return false
+    }
+
+    override public func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        let optionalContext = NSUIGraphicsGetCurrentContext()
+        guard let context = optionalContext else { return }
+        
+        if _indicesToHighlight.count != 0 {
+            self.highlightRenderer.drawHighlighted(context: context, indices: _indicesToHighlight)
+        }
+    }
+//
 //    private var pointWherePanBegan = CGPointZero
 //    private var highlightWhenPanBegan: ChartHighlight?
 //    

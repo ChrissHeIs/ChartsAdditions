@@ -38,27 +38,29 @@ public class UNTChartXAxisRenderer: XAxisRenderer {
 //    
 //    internal var axisLabelsAnchorX: Int = 0
 //    
-//    public var markerFont = NSUIFont.systemFontOfSize(10.0)
-//    
-//    public override func drawLabels(context context: CGContext, pos: CGFloat, anchor: CGPoint)
-//    {
-//        guard let xAxis = xAxis as? UNTChartXAxis else { return }
-//        
-//        if xAxis.values.count == 0 { return }
-//        
+    public var markerFont = NSUIFont.systemFont(ofSize: 10.0)
+    
+    public override func drawLabels(context: CGContext, pos: CGFloat, anchor: CGPoint)
+    {
+        guard let xAxis = axis as? UNTChartXAxis else { return }
+        
+        if xAxis.entries.count == 0 { return }
+        
+        super.drawLabels(context: context, pos: pos, anchor: anchor)
+        
 //        let sequenceBeforeAnchor = self.axisLabelsAnchorX.stride(to: max(self.minX - 1, 0), by: -xAxis.axisLabelModulus)
 //        self.drawLabels(forSequence: sequenceBeforeAnchor, context: context, pos: pos, anchor: anchor)
 //        
 //        let sequenceAfterAnchor = self.axisLabelsAnchorX.stride(to: min(self.maxX + 1, xAxis.values.count), by: xAxis.axisLabelModulus)
 //        self.drawLabels(forSequence: sequenceAfterAnchor, context: context, pos: pos, anchor: anchor)
 //        
-//        for marker in xAxis.markers {
-//            if marker.enabled {
-//                self.drawMarker(marker, context: context, y: pos, textAlign: .Center)
-//            }
-//        }
-//    }
-//    
+        for marker in xAxis.markers {
+            if marker.enabled {
+                self.drawMarker(marker: marker, context: context, y: pos, textAlign: .center)
+            }
+        }
+    }
+//a
 //    
 //    internal func drawLabels
 //        <S: SequenceType where S.Generator.Element == Int>
@@ -126,38 +128,38 @@ public class UNTChartXAxisRenderer: XAxisRenderer {
 //        }
 //    }
 //    
-//    private func drawMarker(marker: UNTChartAxisMarker, context: CGContext, y:CGFloat, textAlign: NSTextAlignment) {
-//        guard let xAxis = xAxis as? UNTChartXAxis else { return }
-//        let valueToPixelMatrix = transformer.valueToPixelMatrix
-//        
-//        let xIndex = Int(marker.value)
-//        let label = xAxis.values[xIndex]
-//        var point = CGPointMake(CGFloat(xIndex), 0)
-//        point = CGPointApplyAffineTransform(point, valueToPixelMatrix)
-//        point.y = y
-//        //point.y = point.y + offset
-//        ChartUtils.drawText(
-//            context: context,
-//            text: "              ",
-//            point: point,
-//            align: textAlign,
-//            attributes: [
-//                NSBackgroundColorAttributeName: marker.backgroundColor,
-//                NSFontAttributeName: markerFont,
-//                NSForegroundColorAttributeName: marker.textColor
-//            ]
-//        )
-//        let text = marker.text ?? label!//(xAxis.valueFormatter?.stringFromNumber(marker.value) ?? String(marker.value))
-//        ChartUtils.drawText(
-//            context: context,
-//            text: text,
-//            point: point,
-//            align: textAlign,
-//            attributes: [
-//                NSBackgroundColorAttributeName: marker.backgroundColor,
-//                NSFontAttributeName: markerFont,
-//                NSForegroundColorAttributeName: marker.textColor
-//            ]
-//        )
-//    }
+    private func drawMarker(marker: UNTChartAxisMarker, context: CGContext, y:CGFloat, textAlign: NSTextAlignment) {
+        guard let xAxis = axis as? UNTChartXAxis,
+            let valueToPixelMatrix = transformer?.valueToPixelMatrix else { return }
+        
+        let xIndex = Double(marker.value)
+        let label = xAxis.valueFormatter?.stringForValue(xIndex, axis: xAxis) ?? ""
+        var point = CGPoint(x:CGFloat(xIndex), y:0)
+        point = point.applying(valueToPixelMatrix)
+        point.y = y
+        //point.y = point.y + offset
+        ChartUtils.drawText(
+            context: context,
+            text: "              ",
+            point: point,
+            align: textAlign,
+            attributes: [
+                NSBackgroundColorAttributeName: marker.backgroundColor,
+                NSFontAttributeName: markerFont,
+                NSForegroundColorAttributeName: marker.textColor
+            ]
+        )
+        let text = marker.text ?? label//(xAxis.valueFormatter?.stringFromNumber(marker.value) ?? String(marker.value))
+        ChartUtils.drawText(
+            context: context,
+            text: text,
+            point: point,
+            align: textAlign,
+            attributes: [
+                NSBackgroundColorAttributeName: marker.backgroundColor,
+                NSFontAttributeName: markerFont,
+                NSForegroundColorAttributeName: marker.textColor
+            ]
+        )
+    }
 }
