@@ -20,30 +20,31 @@ public class UNTCombinedChartView: CombinedChartView {
 //
 //    internal var _panToHighlightGestureRecognizer: NSUIPanGestureRecognizer!
 //    
-//    override public var data: ChartData? {
-//        didSet {
-//            self.lastHighlighted = nil
-//            self.highlightModeEnabled = false
-//        }
-//    }
-//    
-//    public var highlightModeEnabled = false {
-//        didSet {
-//            self.dragEnabled = !self.highlightModeEnabled
-//            self.highlightPerTapEnabled = self.highlightModeEnabled
-//            
-//            if !self.highlightModeEnabled {
-//                self.highlightValue(highlight: nil, callDelegate: true)
-//            }
-//            else {
-//                if self.lastHighlighted == nil {
-//                    self.lastHighlighted = getHighlightByTouchPoint(self.center)
-//                }
-//                self.highlightValue(highlight: self.lastHighlighted, callDelegate: true)
-//            }
-//        }
-//    }
-//
+    override public var data: ChartData? {
+        didSet {
+            self.lastHighlighted = nil
+            self.highlightModeEnabled = false
+            self.highlighter = UNTEmptySpaceAllowedHighlighter(chart: self, barDataProvider: self)
+        }
+    }
+    
+    public var highlightModeEnabled = false {
+        didSet {
+            self.dragEnabled = !self.highlightModeEnabled
+            self.highlightPerTapEnabled = self.highlightModeEnabled
+            
+            if !self.highlightModeEnabled {
+                self.highlightValue(nil, callDelegate: true)
+            }
+            else {
+                if self.lastHighlighted == nil {
+                    self.lastHighlighted = getHighlightByTouchPoint(self.center)
+                }
+                self.highlightValue(self.lastHighlighted, callDelegate: true)
+            }
+        }
+    }
+
     public override func initialize() {
         super.initialize()
         
@@ -62,14 +63,6 @@ public class UNTCombinedChartView: CombinedChartView {
 //        
         self.highlightRenderer = UNTChartHighlightRenderer(dataProvider: self, animator: _animator, viewPortHandler:_viewPortHandler)
         self.highlighter = UNTEmptySpaceAllowedHighlighter(chart: self, barDataProvider: self)
-    }
-    
-    open override var data: ChartData?{
-        didSet
-        {
-            // Overriding the existing setter's functionality of highlighter changing
-            self.highlighter = UNTEmptySpaceAllowedHighlighter(chart: self, barDataProvider: self)
-        }
     }
 
     public override func notifyDataSetChanged() {
