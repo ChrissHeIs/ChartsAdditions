@@ -45,9 +45,9 @@ public class UNTChartYAxisRenderer: YAxisRenderer {
             point: point,
             align: textAlign,
             attributes: [
-                NSBackgroundColorAttributeName: marker.backgroundColor,
-                NSFontAttributeName: markerFont,
-                NSForegroundColorAttributeName: marker.textColor
+                NSAttributedString.Key.backgroundColor: marker.backgroundColor,
+                NSAttributedString.Key.font: markerFont,
+                NSAttributedString.Key.foregroundColor: marker.textColor
             ]
         )
         let text = marker.text ?? (yAxis.valueFormatter?.stringForValue(marker.value, axis: yAxis) ?? String(marker.value))
@@ -57,9 +57,9 @@ public class UNTChartYAxisRenderer: YAxisRenderer {
             point: point,
             align: textAlign,
             attributes: [
-                NSBackgroundColorAttributeName: marker.backgroundColor,
-                NSFontAttributeName: markerFont,
-                NSForegroundColorAttributeName: marker.textColor
+                NSAttributedString.Key.backgroundColor: marker.backgroundColor,
+                NSAttributedString.Key.font: markerFont,
+                NSAttributedString.Key.foregroundColor: marker.textColor
             ]
         )
     }

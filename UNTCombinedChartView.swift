@@ -13,8 +13,8 @@ import UIKit
 
 public class UNTCombinedChartView: CombinedChartView {
     
-    override public var rightAxis: UNTChartYAxis { return _rightAxis as! UNTChartYAxis }
-    override public var xAxis: UNTChartXAxis { return _xAxis as! UNTChartXAxis }
+//    override public var rightAxis: UNTChartYAxis { return _rightAxis as! UNTChartYAxis }
+//    override public var xAxis: UNTChartXAxis { return _xAxis as! UNTChartXAxis }
 //    public var rightAxisRenderer: UNTChartYAxisRenderer { return _rightYAxisRenderer as! UNTChartYAxisRenderer }
     public var highlightRenderer: UNTChartHighlightRenderer!
 //
@@ -48,10 +48,10 @@ public class UNTCombinedChartView: CombinedChartView {
     public override func initialize() {
         super.initialize()
         
-        _rightAxis = UNTChartYAxis(position: .right)
+        rightAxis = UNTChartYAxis(position: .right)
         _xAxis = UNTChartXAxis()
-        _rightYAxisRenderer = UNTChartYAxisRenderer(viewPortHandler: _viewPortHandler, yAxis: _rightAxis, transformer: _rightAxisTransformer)
-        _xAxisRenderer = UNTChartXAxisRenderer(viewPortHandler: _viewPortHandler, xAxis: _xAxis, transformer: _leftAxisTransformer)
+        rightYAxisRenderer = UNTChartYAxisRenderer(viewPortHandler: _viewPortHandler, yAxis: rightAxis, transformer: _rightAxisTransformer)
+        xAxisRenderer = UNTChartXAxisRenderer(viewPortHandler: _viewPortHandler, xAxis: _xAxis, transformer: _leftAxisTransformer)
         
         let datesProvider = UNTChartXAxisDatesProvider()
         datesProvider.chartDataProvider = self
@@ -68,7 +68,7 @@ public class UNTCombinedChartView: CombinedChartView {
     public override func notifyDataSetChanged() {
         super.notifyDataSetChanged()
         
-        guard let xAxisRenderer = _xAxisRenderer as? UNTChartXAxisRenderer else { return }
+        guard let xAxisRenderer = xAxisRenderer as? UNTChartXAxisRenderer else { return }
         guard let data = self.data else { return }
         xAxisRenderer.axisLabelsAnchorX = data.axisLabelsAnchorX
     }

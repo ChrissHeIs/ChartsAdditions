@@ -182,9 +182,9 @@ public class UNTChartXAxisRenderer: XAxisRenderer {
             point: point,
             align: textAlign,
             attributes: [
-                NSBackgroundColorAttributeName: marker.backgroundColor,
-                NSFontAttributeName: markerFont,
-                NSForegroundColorAttributeName: marker.textColor
+                NSAttributedString.Key.backgroundColor: marker.backgroundColor,
+                NSAttributedString.Key.font: markerFont,
+                NSAttributedString.Key.foregroundColor: marker.textColor
             ]
         )
         let text = marker.text ?? label//(xAxis.valueFormatter?.stringFromNumber(marker.value) ?? String(marker.value))
@@ -194,9 +194,9 @@ public class UNTChartXAxisRenderer: XAxisRenderer {
             point: point,
             align: textAlign,
             attributes: [
-                NSBackgroundColorAttributeName: marker.backgroundColor,
-                NSFontAttributeName: markerFont,
-                NSForegroundColorAttributeName: marker.textColor
+                NSAttributedString.Key.backgroundColor: marker.backgroundColor,
+                NSAttributedString.Key.font: markerFont,
+                NSAttributedString.Key.foregroundColor: marker.textColor
             ]
         )
     }

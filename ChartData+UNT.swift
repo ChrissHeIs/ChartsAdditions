@@ -38,17 +38,16 @@ public extension ChartDataSet {
     func insertYVals(yVals: [ChartDataEntry], atIndex index: Int) {
         self.willChangeValue(forKey: "yVals")
         
-        var indexOfNextObjectToInsert = index
-        for yVal in yVals {
-            self.values.insert(yVal, at: indexOfNextObjectToInsert)
-            indexOfNextObjectToInsert += 1
-        }
+        var newValues = entries
+        newValues.insert(contentsOf: yVals, at: index)
+        replaceEntries(newValues)
+        let indexOfNextObjectToInsert = index + yVals.count
         
-        let recordsToShiftCount = self.values.count - indexOfNextObjectToInsert;
+        let recordsToShiftCount = self.entries.count - indexOfNextObjectToInsert;
         if recordsToShiftCount != 0 {
             let shiftDelta = yVals.count
-            for i in indexOfNextObjectToInsert...self.values.count - 1 {
-                self.values[i].x += Double(shiftDelta)
+            for i in indexOfNextObjectToInsert...self.entries.count - 1 {
+                self.entries[i].x += Double(shiftDelta)
             }
         }
         

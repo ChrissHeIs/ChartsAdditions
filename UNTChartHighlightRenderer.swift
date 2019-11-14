@@ -107,9 +107,6 @@ public class UNTChartHighlightRenderer: Renderer {
     
     public func drawHighlightLines(context: CGContext, point: CGPoint, set: ILineScatterCandleRadarChartDataSet)
     {
-        guard let viewPortHandler = viewPortHandler else {
-            return;
-        }
         
         // draw vertical highlight lines
         if set.isVerticalHighlightIndicatorEnabled
